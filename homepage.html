@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Homepage</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <ul type="none">
+        <li> <a href="">Contact</a></li>
+        <li> <a href="">About</a></li>
+        <li class="text"> <a href="">Home</a></li>
+    </ul>
+    <div class="container">
+        <h2>Employee Records</h2>
+        <table id="employeeTable">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Name</th>
+                    <th>Email</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>1</td>
+                    <td>Kirstie Meow Estrano</td>
+                    <td>estranokirstie@gmail.com</td>
+                    <td>
+                        <a href="#" class="edit">Edit</a>
+                        <a href="#" class="delete">Delete</a>
+                    </td>
+                </tr>
+                <tr>
+                    <td>2</td>
+                    <td>Mervin Pressy Bagagnan</td>
+                    <td>mervin.baganan@gmail.com</td>
+                    <td>
+                        <a href="#" class="edit">Edit</a>
+                        <a href="#" class="delete">Delete</a>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        <label for="create-toggle" class="create-button">Create</label>
+    </div>
+    <input type="checkbox" id="create-toggle" class="create-toggle">
+    <div id="create-form" class="form-popup">
+        <form onsubmit="addEmployee(event)" class="form-container">
+            <h2>Create Employee</h2>
+            <label for="name"><b>Name</b></label>
+            <input type="text" placeholder="Enter Name" name="name" required>
+        
+            <label for="email"><b>Email</b></label>
+            <input type="text" placeholder="Enter Email" name="email" required>
+        
+            <button type="submit" class="btn">Create</button>
+            <label for="create-toggle" class="btn cancel">Close</label>
+        </form>
+    </div>
+
+    <script>
+        // Add event listener to toggle form visibility
+        document.getElementById('create-toggle').addEventListener('change', function() {
+            var form = document.getElementById('create-form');
+            if (this.checked) {
+                form.style.display = 'block';
+            } else {
+                form.style.display = 'none';
+            }
+        });
+
+        // Function to add employee
+        function addEmployee(event) {
+            event.preventDefault(); // Prevent form submission
+            
+            // Get form values
+            var name = document.getElementsByName('name')[0].value;
+            var email = document.getElementsByName('email')[0].value;
+            
+            // Add new row to table
+            var table = document.getElementById('employeeTable').getElementsByTagName('tbody')[0];
+            var newRow = table.insertRow();
+            var idCell = newRow.insertCell(0);
+            var nameCell = newRow.insertCell(1);
+            var emailCell = newRow.insertCell(2);
+            var actionsCell = newRow.insertCell(3);
+            
+            idCell.appendChild(document.createTextNode('')); // You may want to dynamically assign an ID
+            nameCell.appendChild(document.createTextNode(name));
+            emailCell.appendChild(document.createTextNode(email));
+            actionsCell.innerHTML = '<a href="#" class="edit">Edit</a> <a href="#" class="delete">Delete</a>';
+            
+            // Clear form fields
+            document.getElementsByName('name')[0].value = '';
+            document.getElementsByName('email')[0].value = '';
+
+            // Add event listeners to the new Edit and Delete links
+            actionsCell.querySelector('.edit').addEventListener('click', editEmployee);
+            actionsCell.querySelector('.delete').addEventListener('click', deleteEmployee);
+        }
+
+        // Function to edit employee
+        function editEmployee(event) {
+            event.preventDefault(); // Prevent default link behavior
+            
+            var row = this.closest('tr');
+            var name = row.cells[1].innerText;
+            var email = row.cells[2].innerText;
+
+            // Fill form fields with existing data
+            document.getElementsByName('name')[0].value = name;
+            document.getElementsByName('email')[0].value = email;
+
+            // Remove the row from the table
+            row.remove();
+        }
+
+        // Function to delete employee
+        function deleteEmployee(event) {
+            event.preventDefault(); // Prevent default link behavior
+            
+            var row = this.closest('tr');
+            row.remove();
+        }
+    </script>
+</body>
+</html>
